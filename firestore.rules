@@ -1,0 +1,64 @@
+rules_version = '2';
+
+// Acceso por roles. Cada persona necesita un documento usuarios/{uid} con
+// { rol: 'admin' | 'asistente', activo: true }. Sin él no puede leer ni escribir nada,
+// aunque haya creado una cuenta por su cuenta.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function perfil() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data;
+    }
+    function esActivo() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && perfil().activo == true;
+    }
+    function esAdmin() {
+      return esActivo() && perfil().rol == 'admin';
+    }
+
+    match /usuarios/{uid} {
+      allow read: if request.auth != null && (request.auth.uid == uid || esAdmin());
+      allow write: if esAdmin();
+    }
+
+    match /clientes/{clienteId} {
+      allow read, create, update: if esActivo();
+      allow delete: if esAdmin();
+
+      match /archivos/{archivoId} {
+        allow read: if esActivo();
+        allow create, update, delete: if esAdmin();
+      }
+
+      match /diagnosticos/{diagnosticoId} {
+        allow read, create: if esActivo();
+        allow update, delete: if esAdmin();
+
+        match /odontograma/{documento} {
+          allow read, create, update: if esActivo();
+          allow delete: if esAdmin();
+        }
+
+        match /tratamientos/{tratamientoId} {
+          allow read, create: if esActivo();
+          allow update, delete: if esAdmin();
+
+          match /pagos/{pagoId} {
+            allow read, create: if esActivo();
+            allow update, delete: if esAdmin();
+          }
+        }
+      }
+    }
+
+    // Consultas de grupo de colecciones usadas por Estadísticas.
+    match /{ruta=**}/tratamientos/{tratamientoId} {
+      allow read: if esActivo();
+    }
+    match /{ruta=**}/pagos/{pagoId} {
+      allow read: if esActivo();
+    }
+  }
+}
