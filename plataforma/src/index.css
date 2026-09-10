@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Identidad de Milla & Mendez: dorado, negro y tonos crema/arena. */
+@theme {
+  --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display Variable", Georgia, serif;
+
+  --color-oro-50: #faf6ef;
+  --color-oro-100: #f3eadb;
+  --color-oro-200: #e6d3b5;
+  --color-oro-300: #d6b98c;
+  --color-oro-400: #c9a36b;
+  --color-oro-500: #b89058; /* dorado de la marca */
+  --color-oro-600: #9c7743;
+  --color-oro-700: #7c5d35; /* dorado legible sobre fondos claros */
+  --color-oro-800: #5c4528;
+  --color-oro-900: #3d2e1b;
+
+  --color-tinta-50: #f5f5f4;
+  --color-tinta-100: #e7e6e4;
+  --color-tinta-200: #d1cfcb;
+  --color-tinta-300: #a9a6a0;
+  --color-tinta-400: #85827c;
+  --color-tinta-500: #6b6862;
+  --color-tinta-600: #514f4a;
+  --color-tinta-700: #3a3936;
+  --color-tinta-800: #242322;
+  --color-tinta-900: #171717;
+  --color-tinta-950: #0e0e0e; /* negro del sidebar */
+
+  --color-crema: #f7f4ef;
+  --color-arena: #e9e2d6;
+  --color-arena-claro: #f2ede5;
+
+  --color-peligro-50: #fbefed;
+  --color-peligro-100: #f4d6d2;
+  --color-peligro-600: #a63d32;
+  --color-peligro-700: #8a3128;
+
+  --color-exito-50: #eef5ef;
+  --color-exito-700: #3f6b4a;
+
+  --animate-fade-in: fade-in 180ms ease-out;
+  --animate-toast-in: toast-in 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-encoger: encoger linear forwards;
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes encoger {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-crema text-tinta-900 antialiased;
+  }
+
+  /* Tailwind v4 ya no pone cursor de mano en los botones. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    @apply bg-oro-200 text-tinta-950;
+  }
+}
+
+/* Clases reutilizables para no repetir largas listas de utilidades en cada página. */
+@layer components {
+  .btn {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-semibold whitespace-nowrap transition-colors
+      focus-visible:ring-2 focus-visible:ring-oro-400 focus-visible:ring-offset-2 focus-visible:outline-none
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-chico { @apply h-8 gap-1.5 rounded-md px-2.5 text-xs; }
+  .btn-icono { @apply h-9 w-9 px-0; }
+
+  .btn-primario { @apply bg-tinta-900 text-white hover:bg-tinta-700; }
+  .btn-oro { @apply bg-oro-500 text-tinta-950 hover:bg-oro-400; }
+  .btn-peligro { @apply bg-peligro-600 text-white hover:bg-peligro-700; }
+  .btn-secundario { @apply border border-arena bg-white text-tinta-800 hover:border-oro-300 hover:bg-oro-50; }
+  .btn-fantasma { @apply text-tinta-600 hover:bg-arena-claro hover:text-tinta-900; }
+  .btn-suave { @apply border border-oro-200 bg-oro-50 text-oro-800 hover:border-oro-300 hover:bg-oro-100; }
+  .btn-suave-peligro { @apply border border-peligro-100 bg-peligro-50 text-peligro-700 hover:bg-peligro-100; }
+
+  .etiqueta {
+    @apply mb-1.5 block text-xs font-semibold tracking-wider text-tinta-600 uppercase;
+  }
+  .campo {
+    @apply w-full rounded-lg border border-arena bg-white px-3 py-2 text-sm text-tinta-900 transition-colors
+      placeholder:text-tinta-400 focus:border-oro-400 focus:ring-2 focus:ring-oro-200 focus:outline-none
+      disabled:cursor-not-allowed disabled:bg-arena-claro disabled:text-tinta-400;
+  }
+  select.campo, input.campo { @apply h-10; }
+
+  .tarjeta { @apply rounded-xl border border-arena bg-white p-5 shadow-sm; }
+
+  .tabla-contenedor { @apply overflow-x-auto rounded-xl border border-arena bg-white shadow-sm; }
+  .tabla { @apply w-full text-left text-sm; }
+  .tabla th {
+    @apply border-b border-arena bg-arena-claro px-4 py-3 text-xs font-semibold tracking-wider whitespace-nowrap text-tinta-600 uppercase;
+  }
+  .tabla td { @apply border-b border-arena/70 px-4 py-3 align-top; }
+  .tabla tbody tr:last-child td { @apply border-b-0; }
+  .tabla tbody tr { @apply transition-colors hover:bg-oro-50/50; }
+
+  .vacio { @apply rounded-xl border border-dashed border-arena bg-white/60 p-8 text-center text-sm text-tinta-500; }
+}
