@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "default": "odonto-system-438b7"
+  },
+  "targets": {
+    "odonto-system-438b7": {
+      "hosting": {
+        "plataforma": ["odonto-system-438b7"],
+        "landing": ["milla-mendez-odontologia"]
+      }
+    }
+  }
+}
