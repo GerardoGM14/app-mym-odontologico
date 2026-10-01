@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* Misma identidad que la plataforma (plataforma-odonto/src/index.css). */
+@theme {
+  --font-sans: "Montserrat Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display Variable", Georgia, serif;
+  --font-newsreader: "Newsreader Variable", Georgia, serif;
+
+  --color-oro-50: #faf6ef;
+  --color-oro-100: #f3eadb;
+  --color-oro-200: #e6d3b5;
+  --color-oro-300: #d6b98c;
+  --color-oro-400: #c9a36b;
+  --color-oro-500: #b89058;
+  --color-oro-600: #9c7743;
+  --color-oro-700: #7c5d35;
+  --color-oro-800: #5c4528;
+
+  --color-tinta-100: #e7e6e4;
+  --color-tinta-200: #d1cfcb;
+  --color-tinta-300: #a9a6a0;
+  --color-tinta-400: #85827c;
+  --color-tinta-500: #6b6862;
+  --color-tinta-600: #514f4a;
+  --color-tinta-700: #3a3936;
+  --color-tinta-800: #242322;
+  --color-tinta-900: #171717;
+  --color-tinta-950: #0e0e0e;
+
+  --color-crema: #f7f4ef;
+  --color-arena: #e9e2d6;
+  --color-arena-claro: #f2ede5;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-crema text-tinta-900 antialiased;
+  }
+  ::selection {
+    @apply bg-oro-200 text-tinta-950;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold whitespace-nowrap transition-colors
+      focus-visible:ring-2 focus-visible:ring-oro-400 focus-visible:ring-offset-2 focus-visible:outline-none;
+  }
+  .btn-oro { @apply bg-oro-500 text-tinta-950 hover:bg-oro-400; }
+  .btn-negro { @apply bg-tinta-900 text-white hover:bg-tinta-700; }
+  .btn-contorno { @apply border border-white/30 text-white hover:border-oro-400 hover:text-oro-400; }
+
+  .titulo-seccion { @apply text-3xl font-bold tracking-tight text-tinta-950 md:text-4xl; }
+  .linea-oro { @apply mt-4 h-0.5 w-12 rounded-full bg-oro-500; }
+  .contenedor { @apply mx-auto max-w-6xl px-5 md:px-8; }
+
+  /* Línea dorada decorativa de los títulos de sección: 585.5 x 1 px, opacidad 46 %. */
+  .linea-dorada {
+    display: block;
+    flex: 1 1 0;
+    max-width: 585.5px;
+    height: 1px;
+    opacity: 0.46;
+    /* Simétrica: intensa al centro y desvanecida en los extremos (títulos centrados). */
+    background: linear-gradient(90deg, rgb(220 193 150 / 0.3) 0%, #b58d55 33%, #b58d55 67%, rgb(220 193 150 / 0.3) 100%);
+  }
+  /* Variante a todo lo ancho (separador del pie de página). */
+  .linea-dorada-completa {
+    flex: none;
+    width: 100%;
+    max-width: none;
+  }
+  /* Variante para títulos a la izquierda: intensa junto al texto y desvanecida hacia la derecha. */
+  .linea-dorada-derecha {
+    background: linear-gradient(90deg, #b58d55 0%, #b58d55 33%, rgb(220 193 150 / 0.3) 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

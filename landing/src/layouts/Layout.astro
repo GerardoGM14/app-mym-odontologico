@@ -1,0 +1,38 @@
+---
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/playfair-display';
+// Newsreader normal y cursiva (con tamaño óptico: el trazo se afina en los títulos grandes).
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '../styles/global.css';
+import { clinica } from '../data/clinica';
+
+interface Props {
+  titulo?: string;
+}
+
+const titulo = Astro.props.titulo ?? `${clinica.nombre} · ${clinica.especialidad} en Chimbote`;
+const imagenSocial = new URL('/og-imagen.jpg', Astro.site).href;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="theme-color" content="#0e0e0e" />
+    <title>{titulo}</title>
+    <meta name="description" content={clinica.descripcion} />
+    <link rel="canonical" href={Astro.site} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={clinica.descripcion} />
+    <meta property="og:image" content={imagenSocial} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body class="font-sans">
+    <slot />
+  </body>
+</html>
