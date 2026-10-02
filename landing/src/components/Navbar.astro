@@ -1,0 +1,83 @@
+---
+import { clinica, urlWhatsapp } from '../data/clinica';
+
+const enlaces = [
+  { texto: 'Nosotros', href: '#nosotros' },
+  { texto: 'Servicios', href: '#servicios' },
+  { texto: '¿Por qué elegirnos?', href: '#por-que-elegirnos' },
+  { texto: 'Visítanos', href: '#visitanos' },
+];
+---
+
+<!-- Transparente sobre la portada; al bajar se vuelve sólida (#131414). -->
+<header
+  id="barra"
+  data-solida="false"
+  class="group fixed inset-x-0 top-0 z-50 border-b border-transparent transition-[background-color,border-color] duration-300 data-[solida=true]:border-white/10 data-[solida=true]:bg-[#131414]"
+>
+  <nav class="mx-auto grid h-20 max-w-7xl grid-cols-[1fr_auto] items-center gap-6 px-5 md:px-8 lg:grid-cols-[1fr_auto_1fr]" aria-label="Principal">
+    <a href="#" class="justify-self-start" aria-label={`${clinica.nombre}, ir al inicio`}>
+      <img src="/logo-millamendez.png" alt={`${clinica.nombre} · ${clinica.especialidad}`} width="804" height="211" class="h-11 w-auto md:h-12" />
+    </a>
+
+    <ul class="hidden items-center gap-12 lg:flex xl:gap-16">
+      {enlaces.map((e) => (
+        <li>
+          <a href={e.href} class="text-sm font-medium whitespace-nowrap text-white/85 transition-colors hover:text-oro-400">{e.texto}</a>
+        </li>
+      ))}
+    </ul>
+
+    <div class="flex items-center justify-self-end gap-2">
+      <a href={urlWhatsapp} target="_blank" rel="noopener" class="btn btn-oro hidden h-11 px-5 sm:inline-flex">
+        <img src="/icon-calendar.svg" alt="" width="20" height="20" class="h-5 w-5" />
+        Agenda tu cita
+      </a>
+      <button
+        type="button"
+        id="boton-menu"
+        class="grid h-11 w-11 place-items-center rounded-md text-white hover:bg-white/10 lg:hidden"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        aria-controls="menu-movil"
+      >
+        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="menu-movil" class="hidden border-t border-white/10 bg-[#131414] lg:hidden">
+    <div class="mx-auto flex max-w-7xl flex-col gap-1 px-5 py-4 md:px-8">
+      {enlaces.map((e) => <a href={e.href} class="rounded-md px-3 py-3 text-sm font-medium text-white/85 hover:bg-white/5 hover:text-oro-400">{e.texto}</a>)}
+      <a href={urlWhatsapp} target="_blank" rel="noopener" class="btn btn-oro mt-2 sm:hidden">
+        <img src="/icon-calendar.svg" alt="" width="20" height="20" class="h-5 w-5" />
+        Agenda tu cita
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const barra = document.getElementById('barra');
+  const boton = document.getElementById('boton-menu');
+  const menu = document.getElementById('menu-movil');
+  let menuAbierto = false;
+
+  // La barra se vuelve sólida al bajar, o cuando el menú del celular está abierto.
+  const actualizar = () => barra?.setAttribute('data-solida', String(window.scrollY > 24 || menuAbierto));
+
+  const alternarMenu = (abrir: boolean) => {
+    menuAbierto = abrir;
+    menu?.classList.toggle('hidden', !abrir);
+    boton?.setAttribute('aria-expanded', String(abrir));
+    boton?.setAttribute('aria-label', abrir ? 'Cerrar menú' : 'Abrir menú');
+    actualizar();
+  };
+
+  boton?.addEventListener('click', () => alternarMenu(!menuAbierto));
+  menu?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => alternarMenu(false)));
+  window.addEventListener('scroll', actualizar, { passive: true });
+  actualizar();
+</script>
