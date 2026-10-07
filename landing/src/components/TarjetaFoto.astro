@@ -1,0 +1,42 @@
+---
+// Tarjeta tipo polaroid: foto arriba, título y descripción abajo.
+// Medidas del diseño: 398 px de ancho, fondo blanco, radio 16 px,
+// relleno 12 px (arriba y lados) y 20 px (abajo), 24 px entre la foto y el texto.
+interface Props {
+  imagen: string;
+  alt: string;
+  titulo: string;
+  descripcion: string;
+  /** Giro en grados (p. ej. -5, 0, 5). */
+  rotacion?: number;
+}
+
+const { imagen, alt, titulo, descripcion, rotacion = 0 } = Astro.props;
+---
+
+<article
+  class="tarjeta-foto flex w-full max-w-[398px] flex-col gap-6 rounded-2xl bg-white px-3 pt-3 pb-5 shadow-xl shadow-black/30 transition-transform duration-300 hover:-translate-y-1"
+  style={`--giro: ${rotacion}deg;`}
+>
+  <img
+    src={imagen}
+    alt={alt}
+    width="374"
+    height="400"
+    loading="lazy"
+    class="aspect-[374/400] w-full rounded-xl object-cover"
+  />
+  <div class="px-2 text-center">
+    <h3 class="text-lg font-semibold text-tinta-950">{titulo}</h3>
+    <p class="mt-1 text-[15px] leading-snug text-tinta-600">{descripcion}</p>
+  </div>
+</article>
+
+<style>
+  /* El giro solo se aplica en pantallas medianas y grandes; en celular van rectas. */
+  @media (min-width: 768px) {
+    .tarjeta-foto {
+      rotate: var(--giro);
+    }
+  }
+</style>

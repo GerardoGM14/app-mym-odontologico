@@ -1,0 +1,45 @@
+---
+// Sección "Conócenos". Fondo: public/background_seccion2.png.
+import { tarjetasConocenos } from '../data/clinica';
+import TarjetaFoto from './TarjetaFoto.astro';
+---
+
+<section id="nosotros" class="relative isolate overflow-hidden bg-tinta-950">
+  <img
+    src="/background_seccion2.png"
+    alt=""
+    width="1528"
+    height="1035"
+    loading="lazy"
+    class="absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  <!-- Velo oscuro desactivado para probar sin él. Para volver a activarlo, descomenta la línea:
+  <div class="absolute inset-0 -z-10 bg-tinta-950/40"></div>
+  -->
+
+  <div class="contenedor relative flex min-h-[min(100svh,900px)] flex-col items-center justify-start pt-14 pb-24 md:pt-16">
+    <div class="flex w-full items-center justify-center gap-6 md:gap-10">
+      <span class="linea-dorada" aria-hidden="true"></span>
+      <h2 class="shrink-0 font-newsreader text-lg font-normal tracking-wide text-[#B58D55] [font-optical-sizing:auto] md:text-xl">
+        CONÓCENOS
+      </h2>
+      <span class="linea-dorada" aria-hidden="true"></span>
+    </div>
+
+    <h3 class="mt-8 max-w-3xl text-center text-2xl leading-[1.1] font-medium text-white md:text-3xl">
+      Cuidar de tu sonrisa es nuestra vocación
+    </h3>
+    <!-- En pantallas medianas y grandes: una oración por renglón (dos líneas). -->
+    <p class="mt-5 max-w-5xl text-center text-base leading-snug text-[#D5D6D6]">
+      En Milla &amp; Méndez Odontología Integral creemos que una buena atención comienza escuchándote.<br class="hidden md:block" />
+      Trabajamos para ofrecerte una experiencia profesional, cercana y enfocada en tu salud bucal.
+    </p>
+
+    <!-- Tres tarjetas independientes (datos en src/data/clinica.ts). -->
+    <!-- La fila es más ancha que el contenedor del texto para separar más las tarjetas sin achicarlas. -->
+    <div class="mt-14 grid w-[min(calc(100vw-2.5rem),1320px)] shrink-0 justify-items-center gap-y-10 md:grid-cols-3 md:gap-x-10 lg:gap-x-20">
+      {tarjetasConocenos.map((tarjeta) => <TarjetaFoto {...tarjeta} />)}
+    </div>
+  </div>
+</section>
+
