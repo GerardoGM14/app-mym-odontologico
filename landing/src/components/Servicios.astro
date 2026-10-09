@@ -1,0 +1,45 @@
+---
+import { servicios } from '../data/clinica';
+import TarjetaServicio from './TarjetaServicio.astro';
+---
+
+<section id="servicios" class="relative isolate overflow-hidden bg-white">
+  <!-- Fondo: public/background_seccion3.png con un velo blanco encima. -->
+  <img
+    src="/background_seccion3.png"
+    alt=""
+    width="678"
+    height="452"
+    loading="lazy"
+    class="absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  <div class="absolute inset-0 -z-10 bg-[#FFFCF5]/85"></div>
+
+  <div class="contenedor relative pt-14 pb-24 md:pt-16">
+    <!-- Título a la izquierda con la línea dorada solo a la derecha (mismo estilo que "CONÓCENOS"). -->
+    <div class="flex items-center gap-6 md:gap-10">
+      <h2 class="shrink-0 font-newsreader text-lg font-normal tracking-wide text-[#B58D55] [font-optical-sizing:auto] md:text-xl">
+        NUESTROS SERVICIOS
+      </h2>
+      <span class="linea-dorada linea-dorada-derecha" aria-hidden="true"></span>
+    </div>
+
+    <!-- Encabezado en dos columnas: título a la izquierda y descripción a la derecha. -->
+    <div class="mt-6 flex flex-col gap-5 md:flex-row md:items-center md:justify-between md:gap-12">
+      <h3 class="text-2xl leading-[1.1] font-medium text-[#000000] md:text-3xl">
+        Todo lo que tu sonrisa <br class="hidden md:block" />necesita,{' '}
+        <span class="ml-[0.15em] font-newsreader text-[1.2em] font-normal text-[#936E34] italic [font-optical-sizing:auto]">en un solo lugar</span>.
+      </h3>
+      <!-- Más ancho y con interlineado amplio: 3 renglones que ocupan la misma altura que el título. -->
+      <p class="max-w-xl text-base leading-relaxed text-[#232424]">
+        Conoce nuestras opciones de atención odontológica, desde cuidados preventivos hasta tratamientos que ayudan a
+        mantener la salud, la función y el bienestar de tu sonrisa.
+      </p>
+    </div>
+
+    <!-- Cuatro tarjetas de servicio (datos en src/data/clinica.ts). -->
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {servicios.map((servicio) => <TarjetaServicio {...servicio} />)}
+    </div>
+  </div>
+</section>

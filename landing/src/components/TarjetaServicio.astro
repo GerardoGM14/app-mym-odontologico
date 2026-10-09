@@ -1,0 +1,48 @@
+---
+// Tarjeta de servicio: foto a sangre, ícono arriba a la izquierda y texto sobre
+// un oscurecimiento en la parte inferior.
+import type { NombreIcono } from '../data/clinica';
+import { urlWhatsappServicio } from '../data/clinica';
+import Icono from './Icono.astro';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  icono: NombreIcono;
+  imagen: string;
+  alt: string;
+}
+
+const { titulo, descripcion, icono, imagen, alt } = Astro.props;
+---
+
+<article class="group relative isolate flex aspect-[2/3] w-full flex-col justify-end overflow-hidden rounded-xl bg-tinta-800">
+  <img
+    src={imagen}
+    alt={alt}
+    width="800"
+    height="1200"
+    loading="lazy"
+    class="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+  <!-- Oscurecimiento inferior para que el texto se lea sobre la foto. -->
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-3/5 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+
+  <span class="absolute top-3 left-3 grid h-9 w-9 place-items-center rounded-full bg-[#131414] text-white">
+    <Icono nombre={icono} class="h-[18px] w-[18px]" />
+  </span>
+
+  <div class="p-4 pt-0">
+    <h3 class="text-[17px] font-semibold text-white">{titulo}</h3>
+    <p class="mt-1.5 text-sm leading-snug text-white/80">{descripcion}</p>
+    <a
+      href={urlWhatsappServicio(titulo)}
+      target="_blank"
+      rel="noopener"
+      class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[#C1A071] transition-colors hover:text-oro-300"
+    >
+      Más información
+      <Icono nombre="flecha" class="h-4 w-4" />
+    </a>
+  </div>
+</article>
