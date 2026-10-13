@@ -1,0 +1,78 @@
+---
+// Sección "¿Por qué elegirnos?". Datos de los motivos en src/data/clinica.ts.
+import { motivos } from '../data/clinica';
+---
+
+<section id="por-que-elegirnos" class="relative isolate overflow-hidden bg-[#050505] text-white">
+  <!-- Fondo: public/background_seccion4.png con un degradado #050505 (100 % → 50 % → 10 %) encima. -->
+  <img
+    src="/background_seccion4.png"
+    alt=""
+    width="1600"
+    height="647"
+    loading="lazy"
+    class="absolute inset-0 -z-20 h-full w-full object-cover"
+  />
+  <div class="degradado-seccion4 absolute inset-0 -z-10"></div>
+
+  <div class="contenedor relative pt-14 pb-24 md:pt-16">
+    <!-- Título a la izquierda con la línea dorada solo a la derecha (mismo estilo que "NUESTROS SERVICIOS"). -->
+    <div class="flex items-center gap-6 md:gap-10">
+      <h2 class="shrink-0 font-newsreader text-lg font-normal tracking-wide text-[#B58D55] [font-optical-sizing:auto] md:text-xl">
+        ¿POR QUÉ ELEGIRNOS?
+      </h2>
+      <span class="linea-dorada linea-dorada-derecha" aria-hidden="true"></span>
+    </div>
+
+    <!-- Dos columnas: contenido a la izquierda y foto en tarjeta a la derecha. -->
+    <div class="grid items-center gap-14 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+    <div class="max-w-2xl">
+      <h3 class="mt-6 text-2xl leading-[1.1] font-medium text-white md:text-3xl">
+        Tu sonrisa merece un{' '}
+        <span class="ml-[0.15em] font-newsreader text-[1.2em] font-normal text-[#C1A071] italic [font-optical-sizing:auto]">cuidado especial.</span>
+      </h3>
+      <p class="mt-4 text-base leading-relaxed text-[#D5D6D6]">
+        Queremos que cada visita sea una experiencia de confianza, con información clara y atención enfocada en tus
+        necesidades.
+      </p>
+
+      <ul class="mt-12 space-y-9">
+        {motivos.map((m) => (
+          <li class="flex items-start gap-5">
+            <img src={m.icono} alt="" width="56" height="56" loading="lazy" class="h-14 w-14 shrink-0 object-contain" />
+            <div>
+              <h4 class="text-lg font-semibold text-white">{m.titulo}</h4>
+              <p class="mt-1.5 text-base leading-relaxed text-[#D5D6D6]">{m.descripcion}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Tarjeta con foto de la clínica: marco blanco, girada 4° en pantallas grandes. -->
+    <figure class="tarjeta-elegirnos mx-auto w-full max-w-[440px] rounded-2xl bg-white p-3 shadow-2xl shadow-black/50 lg:mx-0 lg:w-[400px] lg:translate-x-10 xl:w-[440px] xl:translate-x-16">
+      <img
+        src="/card-por-que-elegirnos.jpg"
+        alt="Odontóloga de Milla & Méndez atendiendo a un paciente en el consultorio"
+        width="388"
+        height="489"
+        loading="lazy"
+        class="aspect-[388/489] w-full rounded-xl object-cover"
+      />
+    </figure>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 1024px) {
+    .tarjeta-elegirnos {
+      rotate: 4deg;
+    }
+  }
+
+  /* Degradado del diseño: #050505 al 100 %, 50 % y 10 %, de izquierda a derecha. */
+  .degradado-seccion4 {
+    background: linear-gradient(90deg, #050505 0%, rgb(5 5 5 / 0.5) 50%, rgb(5 5 5 / 0.1) 100%);
+  }
+</style>
