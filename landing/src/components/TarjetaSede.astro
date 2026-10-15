@@ -1,0 +1,53 @@
+---
+// Tarjeta de sede: foto del local, etiqueta de la ciudad y datos sobre un
+// oscurecimiento en la parte inferior.
+import Icono from './Icono.astro';
+
+interface Props {
+  nombre: string;
+  ciudad: string;
+  direccion: string;
+  referencia?: string;
+  imagen: string;
+  alt: string;
+  /** Enlace de Google Maps. Si no se indica, se busca la dirección. */
+  mapa?: string;
+}
+
+const { nombre, ciudad, direccion, referencia, imagen, alt, mapa } = Astro.props;
+const enlaceMapa =
+  mapa ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${direccion}, ${ciudad}, Perú`)}`;
+---
+
+<article class="group relative isolate flex aspect-[6/7] w-full flex-col justify-end overflow-hidden rounded-xl bg-tinta-800">
+  <img
+    src={imagen}
+    alt={alt}
+    width="720"
+    height="840"
+    loading="lazy"
+    class="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+  />
+  <!-- Oscurecimiento inferior para que el texto se lea sobre la foto. -->
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-3/5 bg-gradient-to-t from-black/90 via-black/60 to-transparent"></div>
+
+  <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-md border border-[#C1A071]/40 bg-black/60 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+    <Icono nombre="ubicacion" class="h-3.5 w-3.5 text-[#C1A071]" />
+    {ciudad}
+  </span>
+
+  <div class="p-5 pt-0">
+    <h3 class="text-[17px] font-semibold text-white">{nombre}</h3>
+    <p class="mt-1 text-[15px] text-white/85">{direccion}</p>
+    {referencia && <p class="mt-1 text-[15px] text-white/85">Referencia: {referencia}</p>}
+    <a
+      href={enlaceMapa}
+      target="_blank"
+      rel="noopener"
+      class="mt-5 inline-flex items-center gap-2 text-sm font-medium text-[#C1A071] transition-colors hover:text-oro-300"
+    >
+      Cómo llegar
+      <Icono nombre="flecha" class="h-4 w-4" />
+    </a>
+  </div>
+</article>
