@@ -1,0 +1,53 @@
+---
+// Sexta sección: llamada a la acción final. Fondo: public/background_seccion6.png
+// (ya viene oscurecida y se funde a negro hacia abajo).
+import { urlLlamada, urlWhatsapp } from '../data/clinica';
+import Footer from './Footer.astro';
+import Icono from './Icono.astro';
+---
+
+<section id="agenda" class="relative isolate overflow-hidden bg-[#050505] text-white">
+  <img
+    src="/background_seccion6.png"
+    alt=""
+    width="6400"
+    height="3679"
+    loading="lazy"
+    class="absolute inset-0 -z-10 h-full w-full object-cover object-top"
+  />
+
+  <div class="contenedor relative flex flex-col justify-start pt-24 pb-16 md:pt-32 md:pb-20">
+    <h2 class="max-w-2xl text-[28px] leading-[1.15] font-medium text-white md:text-4xl">
+      <span class="font-newsreader text-[1.15em] font-normal text-[#C1A071] italic [font-optical-sizing:auto]">El primer paso</span>{' '}
+      <span class="ml-[0.15em]">hacia una sonrisa</span> más saludable comienza hoy.
+    </h2>
+    <p class="mt-4 max-w-xl text-base leading-relaxed text-[#D5D6D6]">
+      ¿Tienes dudas o quieres saber qué opción es adecuada para ti? Estamos aquí para orientarte y ayudarte a dar el
+      siguiente paso.
+    </p>
+
+    <div class="mt-7 flex flex-wrap gap-3">
+      <!-- Mismo botón que el de la barra superior. -->
+      <a href={urlWhatsapp} target="_blank" rel="noopener" class="btn btn-oro h-11 px-5">
+        <img src="/icon-calendar.svg" alt="" width="20" height="20" class="h-5 w-5" />
+        Agenda tu cita
+      </a>
+      <a href={urlLlamada} class="btn btn-contorno h-11 px-5">
+        <Icono nombre="telefono" class="h-5 w-5" />
+        Llámanos
+      </a>
+    </div>
+  </div>
+
+  <Footer />
+
+  <!-- Barra final de créditos, a todo lo ancho. -->
+  <div class="bg-[#191A1A]">
+    <div class="contenedor flex items-center justify-center gap-2.5 py-2.5 text-xs text-tinta-300">
+      <span>Website by :</span>
+      <a href="https://trigra.com.pe" target="_blank" rel="noopener" class="cursor-pointer opacity-90 transition-opacity hover:opacity-100" aria-label="Trigra (abre trigra.com.pe)">
+        <img src="/logo-trigra-footer.png" alt="Trigra" width="393" height="56" loading="lazy" class="h-3.5 w-auto" />
+      </a>
+    </div>
+  </div>
+</section>
