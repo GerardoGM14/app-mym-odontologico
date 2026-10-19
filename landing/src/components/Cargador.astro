@@ -1,0 +1,55 @@
+---
+// Pantalla de carga: cubre la página hasta que termina de cargar (máximo 5 s) y luego se desvanece.
+import { clinica } from '../data/clinica';
+---
+
+<div
+  id="cargador"
+  class="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-8 bg-[#131414] transition-opacity duration-500"
+  role="status"
+  aria-label="Cargando"
+>
+  <img src="/logo-millamendez.png" alt={clinica.nombre} width="804" height="211" class="h-12 w-auto md:h-14" />
+  <div class="h-0.5 w-40 overflow-hidden rounded-full bg-white/10">
+    <div class="barra-carga h-full w-1/3 rounded-full bg-[#C1A071]"></div>
+  </div>
+</div>
+
+<!-- Sin JavaScript no se podría ocultar: en ese caso no se muestra. -->
+<noscript><style>#cargador { display: none; }</style></noscript>
+
+<style>
+  .barra-carga {
+    animation: recorrer 1.1s ease-in-out infinite;
+  }
+  @keyframes recorrer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(300%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .barra-carga { animation: none; width: 100%; }
+  }
+</style>
+
+<script>
+  const cargador = document.getElementById('cargador');
+  const inicio = performance.now();
+  let terminado = false;
+
+  const ocultar = () => {
+    if (terminado || !cargador) return;
+    terminado = true;
+    // Se muestra al menos 600 ms para que no sea un parpadeo.
+    const espera = Math.max(0, 600 - (performance.now() - inicio));
+    setTimeout(() => {
+      cargador.style.opacity = '0';
+      cargador.addEventListener('transitionend', () => cargador.remove(), { once: true });
+      document.documentElement.dataset.cargado = 'true';
+      document.dispatchEvent(new Event('cargador:listo'));
+    }, espera);
+  };
+
+  if (document.readyState === 'complete') ocultar();
+  else window.addEventListener('load', ocultar, { once: true });
+  setTimeout(ocultar, 5000); // Por si alguna imagen tarda demasiado.
+</script>
