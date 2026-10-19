@@ -1,0 +1,162 @@
+---
+// Aviso de cookies: barra fija abajo con la página difuminada detrás, hasta que el
+// visitante acepte o rechace. Google Analytics y el píxel de Meta solo se cargan si acepta.
+import { clinica } from '../data/clinica';
+
+const { googleAnalytics, metaPixel } = clinica.analitica;
+---
+
+<div
+  id="aviso-cookies"
+  class="fixed inset-0 z-[90] hidden"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="aviso-cookies-titulo"
+  data-ga={googleAnalytics}
+  data-pixel={metaPixel}
+>
+  <!-- Fondo difuminado que bloquea la página. -->
+  <div class="absolute inset-0 bg-black/30 backdrop-blur-md"></div>
+
+  <div class="absolute inset-x-0 bottom-0 border-t border-white/10 bg-[#131414] text-white">
+    <div class="mx-auto flex max-w-7xl flex-col gap-5 px-5 py-5 md:flex-row md:items-center md:justify-between md:gap-10 md:px-8">
+      <div class="flex max-w-3xl items-start gap-4">
+        <!-- Ícono de cookie -->
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#C1A071]/15 text-[#C1A071]">
+          <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />
+            <path d="M8.5 8.5v.01" />
+            <path d="M16 15.5v.01" />
+            <path d="M12 12v.01" />
+            <path d="M11 17v.01" />
+            <path d="M7 14v.01" />
+          </svg>
+        </span>
+        <div>
+          <p id="aviso-cookies-titulo" class="text-sm font-semibold text-[#C1A071]">Usamos cookies</p>
+          <p class="mt-1 text-sm leading-relaxed text-[#D5D6D6]">
+            Usamos cookies de medición (Google Analytics y Meta) para conocer cómo se usa el sitio y mejorar tu
+            experiencia. Solo se activan si las aceptas.
+          </p>
+        </div>
+      </div>
+      <div class="flex shrink-0 gap-3">
+        <button type="button" data-cookies="rechazadas" class="btn btn-contorno h-11 flex-1 cursor-pointer px-6 md:flex-none">
+          Rechazar
+        </button>
+        <button type="button" data-cookies="aceptadas" class="btn btn-oro h-11 flex-1 cursor-pointer px-6 md:flex-none">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  type Ventana = Window & {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+    fbq?: ((...args: unknown[]) => void) & { callMethod?: (...a: unknown[]) => void; queue?: unknown[]; loaded?: boolean; version?: string; push?: unknown };
+    _fbq?: unknown;
+  };
+
+  const CLAVE = 'mm.cookies';
+  const aviso = document.getElementById('aviso-cookies');
+  const idAnalytics = aviso?.dataset.ga ?? '';
+  const idPixel = aviso?.dataset.pixel ?? '';
+  const w = window as Ventana;
+  let medicionCargada = false;
+
+  const leer = () => {
+    try { return localStorage.getItem(CLAVE); } catch { return null; }
+  };
+  const guardar = (valor: string) => {
+    try { localStorage.setItem(CLAVE, valor); } catch { /* sin almacenamiento disponible */ }
+  };
+
+  const cargarScript = (src: string) => {
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = src;
+    document.head.appendChild(s);
+  };
+
+  // Solo se llama cuando el visitante aceptó.
+  function cargarMedicion() {
+    if (medicionCargada) return;
+    medicionCargada = true;
+
+    if (idAnalytics) {
+      w.dataLayer = w.dataLayer || [];
+      w.gtag = function () { w.dataLayer!.push(arguments); };
+      w.gtag('js', new Date());
+      w.gtag('config', idAnalytics, { anonymize_ip: true });
+      cargarScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(idAnalytics)}`);
+    }
+
+    if (idPixel && !w.fbq) {
+      const fbq = function (...args: unknown[]) {
+        fbq.callMethod ? fbq.callMethod(...args) : fbq.queue!.push(args);
+      } as NonNullable<Ventana['fbq']>;
+      fbq.push = fbq;
+      fbq.loaded = true;
+      fbq.version = '2.0';
+      fbq.queue = [];
+      w.fbq = fbq;
+      w._fbq = fbq;
+      cargarScript('https://connect.facebook.net/en_US/fbevents.js');
+      w.fbq('init', idPixel);
+      w.fbq('track', 'PageView');
+    }
+  }
+
+  // Borra las cookies de medición si el visitante cambia a "Rechazar".
+  function borrarCookiesDeMedicion() {
+    const dominios = ['', location.hostname, `.${location.hostname}`];
+    document.cookie.split(';').map((c) => c.split('=')[0].trim())
+      .filter((nombre) => /^(_ga|_gid|_gat|_fbp|_fbc)/.test(nombre))
+      .forEach((nombre) => dominios.forEach((d) => {
+        document.cookie = `${nombre}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/${d ? `; domain=${d}` : ''}`;
+      }));
+  }
+
+  const abrir = () => {
+    if (!aviso) return;
+    aviso.classList.remove('hidden');
+    document.documentElement.style.overflow = 'hidden'; // Evita desplazarse mientras está abierto.
+    aviso.querySelector<HTMLButtonElement>('[data-cookies="aceptadas"]')?.focus();
+  };
+
+  const cerrar = () => {
+    aviso?.classList.add('hidden');
+    document.documentElement.style.overflow = '';
+  };
+
+  aviso?.querySelectorAll<HTMLButtonElement>('[data-cookies]').forEach((boton) => {
+    boton.addEventListener('click', () => {
+      const eleccion = boton.dataset.cookies ?? 'rechazadas';
+      const anterior = leer();
+      guardar(eleccion);
+      cerrar();
+      if (eleccion === 'aceptadas') {
+        cargarMedicion();
+      } else if (anterior === 'aceptadas' || medicionCargada) {
+        // Había aceptado antes: se borran las cookies y se recarga para descargar los scripts.
+        borrarCookiesDeMedicion();
+        location.reload();
+      }
+    });
+  });
+
+  // Enlace "Preferencias de cookies" del pie de página.
+  document.addEventListener('cookies:abrir', abrir);
+
+  // Si ya aceptó en una visita anterior, se carga la medición de inmediato.
+  if (leer() === 'aceptadas') cargarMedicion();
+
+  // Si todavía no eligió, el aviso aparece cuando termina la pantalla de carga.
+  if (!leer()) {
+    if (document.documentElement.dataset.cargado) abrir();
+    else document.addEventListener('cargador:listo', abrir, { once: true });
+  }
+</script>

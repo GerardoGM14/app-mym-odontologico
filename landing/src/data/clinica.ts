@@ -18,6 +18,12 @@ export const clinica = {
     instagram: 'https://www.instagram.com/mmodontologiai/',
     tiktok: 'https://www.tiktok.com/@mmodontologiaintegral',
   },
+  // Herramientas de medición. Solo se cargan si el visitante acepta las cookies.
+  // Si un identificador está vacío, esa herramienta no se carga.
+  analitica: {
+    googleAnalytics: '', // ID de medición de Google Analytics 4, p. ej. 'G-XXXXXXXXXX'
+    metaPixel: '', // ID del píxel de Meta (Facebook/Instagram), p. ej. '123456789012345'
+  },
   // Plataforma interna para el personal.
   urlPlataforma: 'https://odonto-system-438b7.web.app',
 };

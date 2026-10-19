@@ -110,7 +110,21 @@ const redes = [
   </div>
 
   <!-- Línea fina inferior y derechos reservados. -->
-  <div class="border-t border-white/10 pt-7">
+  <div class="flex flex-col gap-3 border-t border-white/10 pt-7 sm:flex-row sm:items-center sm:justify-between">
     <p class="text-sm text-tinta-300">© {new Date().getFullYear()} M&amp;M Odontología integral. Todos los derechos reservados.</p>
+    <button
+      type="button"
+      id="preferencias-cookies"
+      class="w-fit cursor-pointer text-sm text-tinta-300 underline-offset-4 transition-colors hover:text-[#C1A071] hover:underline"
+    >
+      Preferencias de cookies
+    </button>
   </div>
 </footer>
+
+<script>
+  // Vuelve a abrir el aviso de cookies para cambiar la elección.
+  document.getElementById('preferencias-cookies')?.addEventListener('click', () => {
+    document.dispatchEvent(new Event('cookies:abrir'));
+  });
+</script>
